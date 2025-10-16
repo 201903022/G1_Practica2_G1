@@ -115,10 +115,10 @@ ggplot(head(tag_interest, 10), aes(x = reorder(tag_name, respuestas_promedio), y
 ```
 ### Interpretación de resultados
 
-El gráfico muestra los 10 *tags* de R con mayor promedio de respuestas en Stack Overflow.  
-Se observa que **“rt”** es el tema con más participación (≈12.5 respuestas por pregunta), seguido de **“prepend”** y **“autohotkey”**, que rondan las 8 respuestas.
+El gráfico presenta los 10 tags de R que reciben, en promedio, más respuestas en Stack Overflow.
+Se nota que “rt” es el tema con mayor participación (alrededor de 12.5 respuestas por pregunta), mientras que “prepend” y “autohotkey” también destacan con cerca de 8 respuestas en promedio.
 
-En general, los temas más discutidos están relacionados con **automatización**, **manipulación de datos** y **buenas prácticas de código**.  
-Esto indica que la comunidad de R es activa y tiende a responder más en temas prácticos o que generan dudas comunes.
+En general, los temas más comentados están relacionados con automatización, manipulación de datos y buenas prácticas de programación.
+Esto sugiere que la comunidad de R muestra gran interés en resolver dudas prácticas y compartir soluciones útiles para el trabajo diario con el lenguaje.
 
-En conclusión, los *tags* con mayor promedio de respuestas reflejan **alto interés y participación** dentro de la comunidad de usuarios de R.
+En resumen, los tags con más respuestas reflejan los temas donde la comunidad es más activa y colaborativa, lo que demuestra un alto nivel de participación e intercambio de conocimiento entre los usuarios.

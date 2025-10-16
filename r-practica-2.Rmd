@@ -1,0 +1,116 @@
+---
+title: "Práctica 2 – Stack Overflow (R)"
+author: "Jonathan Alexander Sanchez Barrios – 201903022"
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+## 1. Cargar los datasets
+
+```{r}
+questions <- read_csv("questions.csv")
+answers <- read_csv("answers.csv")
+tags <- read_csv("tags.csv")
+question_tags <- read_csv("question_tags.csv")
+
+glimpse(questions)
+glimpse(answers)
+glimpse(tags)
+glimpse(question_tags)
+```
+
+## 1. Left-joining questions and tags
+
+```{r}
+questions_with_tags <- questions %>%
+  left_join(question_tags, by = c("id" = "question_id")) %>%
+  left_join(tags, by = c("tag_id" = "id")) %>%
+  mutate(tag_name = replace_na(tag_name, "only-r"))
+
+head(questions_with_tags)
+```
+
+## 2. Comparing scores across tags
+
+```{r}
+tag_scores <- questions_with_tags %>%
+  group_by(tag_name) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE)) %>%
+  arrange(desc(mean_score))
+
+# Mostrar las etiquetas con mayor score promedio
+head(tag_scores, 10)
+```
+
+## 3. Finding gaps between questions and answers
+
+```{r}
+questions_answers <- questions %>%
+  inner_join(answers, by = c("id" = "question_id"),
+             suffix = c("_question", "_answer")) %>%
+  mutate(
+    creation_date_question = ymd_hms(creation_date_question),
+    creation_date_answer = ymd_hms(creation_date_answer),
+    gap = creation_date_answer - creation_date_question
+  )
+
+head(questions_answers)
+```
+
+## 4. Joining question and answer counts
+
+```{r}
+answer_counts <- answers %>%
+  count(question_id, name = "n") %>%
+  arrange(desc(n))
+
+question_answer_counts <- questions %>%
+  left_join(answer_counts, by = c("id" = "question_id")) %>%
+  mutate(n = replace_na(n, 0))
+
+head(question_answer_counts)
+```
+
+## 5. Joining questions, answers, and tags
+
+```{r}
+questions_tags_answers <- question_tags %>%
+  inner_join(question_answer_counts, by = c("question_id" = "id")) %>%
+  inner_join(tags, by = c("tag_id" = "id"))
+
+head(questions_tags_answers)
+```
+
+## 6. Análisis final – interés por tag
+
+```{r}
+tag_interest <- questions_tags_answers %>%
+  group_by(tag_name) %>%
+  summarize(
+    preguntas = n(),
+    respuestas_promedio = mean(n, na.rm = TRUE)
+  ) %>%
+  arrange(desc(respuestas_promedio))
+
+head(tag_interest, 10)
+```
+
+## 7. Visualización – gráfico de los tags más populares
+
+```{r}
+library(ggplot2)
+
+ggplot(head(tag_interest, 10), aes(x = reorder(tag_name, respuestas_promedio), y = respuestas_promedio)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Tags de R con Mayor Promedio de Respuestas",
+       x = "Etiqueta (tag)",
+       y = "Promedio de respuestas") +
+  theme_minimal()
+```

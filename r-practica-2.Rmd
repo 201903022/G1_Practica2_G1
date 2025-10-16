@@ -1,5 +1,5 @@
 ---
-title: "Práctica 2 – Stack Overflow (R)"
+title: "Práctica 2 "
 author: "Jonathan Alexander Sanchez Barrios – 201903022"
 date: "`r Sys.Date()`"
 output: html_notebook
@@ -11,7 +11,7 @@ library(tidyverse)
 library(lubridate)
 ```
 
-## 1. Cargar los datasets
+## 1. Cargar los datos
 
 ```{r}
 questions <- read_csv("questions.csv")
@@ -114,3 +114,12 @@ ggplot(head(tag_interest, 10), aes(x = reorder(tag_name, respuestas_promedio), y
        y = "Promedio de respuestas") +
   theme_minimal()
 ```
+## 9. Interpretación de resultados
+
+El gráfico muestra los 10 *tags* de R con mayor promedio de respuestas en Stack Overflow.  
+Se observa que **“rt”** es el tema con más participación (≈12.5 respuestas por pregunta), seguido de **“prepend”** y **“autohotkey”**, que rondan las 8 respuestas.
+
+En general, los temas más discutidos están relacionados con **automatización**, **manipulación de datos** y **buenas prácticas de código**.  
+Esto indica que la comunidad de R es activa y tiende a responder más en temas prácticos o que generan dudas comunes.
+
+En conclusión, los *tags* con mayor promedio de respuestas reflejan **alto interés y participación** dentro de la comunidad de usuarios de R.
